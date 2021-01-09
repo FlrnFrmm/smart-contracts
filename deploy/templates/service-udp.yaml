@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: goshimmer-udp
+  labels:
+    svc: goshimmer
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "autopeering"
+    port: 14626
+    targetPort: 14626
+    protocol: UDP
+  selector:
+    app: goshimmer

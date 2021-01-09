@@ -1,28 +1,30 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: goshimmer
+  name: goshimmer-tcp
   labels:
     svc: goshimmer
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-  - port: 14626 # Autopeering 
-    targetPort: 14626
-    protocol: UDP
-  - port: 14666 # Gossip
+  - name: "gossip"
+    port: 14666
     targetPort: 14666
     protocol: TCP
-  - port: 10895 # FPC
+  - name: "fpc"
+    port: 10895
     targetPort: 10895
     protocol: TCP
-  - port: 8080 # HTTP API 
+  - name: "http-api"
+    port: 8080
     targetPort: 8080
     protocol: TCP
-  - port: 8081 # Dashboard
+  - name: "dashboard"
+    port: 8081
     targetPort: 8081
     protocol: TCP
-  - port: 6061 # pprof profiling
+  - name: "pprof-profiling"
+    port: 6061
     targetPort: 6061
     protocol: TCP
   selector:
