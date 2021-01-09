@@ -5,8 +5,25 @@ metadata:
   labels:
     svc: goshimmer
 spec:
+  type: NodePort
   ports:
-  - port: 80
+  - port: 14626 # Autopeering 
+    targetPort: 14626
+    protocol: UDP
+  - port: 14666 # Gossip
+    targetPort: 14666
+    protocol: TCP
+  - port: 10895 # FPC
+    targetPort: 10895
+    protocol: TCP
+  - port: 8080 # HTTP API 
+    targetPort: 8080
+    protocol: TCP
+  - port: 8081 # Dashboard
+    targetPort: 8081
+    protocol: TCP
+  - port: 6061 # pprof profiling
+    targetPort: 6061
     protocol: TCP
   selector:
     app: goshimmer
