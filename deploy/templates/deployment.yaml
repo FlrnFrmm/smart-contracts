@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goshimmer-deployment
+  labels:
+    app: goshimmer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goshimmer
+  template:
+    metadata:
+      labels:
+        app: goshimmer
+    spec:
+      containers:
+      - name: goshimmer-container
+        image: iotaledger/goshimmer:latest
+        ports:
+        - containerPort: 14626 # Autopeering 
+          protocol: UDP
+        - containerPort: 14666 # Gossip
+          protocol: TCP
+        - containerPort: 10895 # FPC
+          protocol: TCP
+        - containerPort: 8080 # HTTP API 
+          protocol: TCP
+        - containerPort: 8081 # Dashboard
+          protocol: TCP
+        - containerPort: 6061 # pprof profiling
+          protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: goshimmer-config 
+        args:
+        - "--skip-config=true"
+        - "--autopeering.entryNodes=2PV5487xMw5rasGBXXWeqSi4hLz7r19YBt8Y1TGAsQbj@ressims.iota.cafe:15626,5EDH4uY78EA6wrBkHHAVBWBMDt7EcksRq6pjzipoW15B@entrynode.alphanet.einfachiota.de:14656"
+        - "--node.disablePlugins="
+        - "--node.enablePlugins=remotelog,networkdelay,spammer,prometheus"
+        - "--logger.level=info"
+        - "--logger.disableEvents=false"
+        - "--logger.remotelog.serverAddress=ressims.iota.cafe:5213"
+        - "--drng.pollen.instanceId=1"
+        - "--drng.pollen.threshold=3"
+        - "--drng.pollen.committeeMembers=AheLpbhRs1XZsRF8t8VBwuyQh9mqPHXQvthV5rsHytDG,FZ28bSTidszUBn8TTCAT9X1nVMwFNnoYBmZ1xfafez2z,GT3UxryW4rA9RN9ojnMGmZgE2wP7psagQxgVdA4B9L1P,4pB5boPvvk2o5MbMySDhqsmC2CtUdXyotPPEpb7YQPD7,64wCsTZpmKjRVHtBKXiFojw7uw3GszumfvC4kHdWsHga"
+        - "--drng.xteam.instanceId=1339"
+        - "--drng.xteam.threshold=4"
+        - "--drng.xteam.committeeMembers=GUdTwLDb6t6vZ7X5XzEnjFNDEVPteU7tVQ9nzKLfPjdo,68vNzBFE9HpmWLb2x4599AUUQNuimuhwn3XahTZZYUHt,Dc9n3JxYecaX3gpxVnWb4jS3KVz1K1SgSK1KpV1dzqT1,75g6r4tqGZhrgpDYZyZxVje1Qo54ezFYkCw94ELTLhPs,CN1XLXLHT9hv7fy3qNhpgNMD6uoHFkHtaNNKyNVCKybf,7SmttyqrKMkLo5NPYaiFoHs8LE6s7oCoWCQaZhui8m16,CypSmrHpTe3WQmCw54KP91F5gTmrQEL7EmTX38YStFXx"
